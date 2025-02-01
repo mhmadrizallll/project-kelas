@@ -1,0 +1,18 @@
+import express, { Express } from "express";
+const router = express.Router();
+import { userController } from "../controllers/user-controller";
+import authMiddleware from "../middlewares/auth";
+
+router.get("/", authMiddleware, userController.getAllUsers);
+router.post("/register", userController.registerGuest);
+router.post("/login", userController.login);
+router.post(
+  "/register/logging",
+  authMiddleware,
+  userController.registerLogging
+);
+router.put("/:id", authMiddleware, userController.updateUser);
+router.delete("/:id", authMiddleware, userController.deleteUser);
+router.put("/restore/:id", authMiddleware, userController.restoreUser);
+
+export default router;
