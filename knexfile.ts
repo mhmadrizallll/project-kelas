@@ -1,3 +1,4 @@
+// knexfile.ts
 import type { Knex } from "knex";
 
 // Update with your config settings.
@@ -12,7 +13,14 @@ const config: { [key: string]: Knex.Config } = {
       host: "localhost",
       port: 5432,
     },
+    migrations: {
+      tableName: "knex_migrations",
+      directory: "./migrations",
+    },
+    seeds: {
+      directory: "./seeds",
+    },
   },
 };
 
-module.exports = config;
+export default config;

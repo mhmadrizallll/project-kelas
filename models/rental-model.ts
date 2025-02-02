@@ -1,6 +1,6 @@
 import { Model, ModelObject } from "objection";
 
-class RentalModel extends Model {
+export class RentalModel extends Model {
   id!: string;
   book_id!: string;
   user_id!: string;

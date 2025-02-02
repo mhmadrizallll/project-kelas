@@ -1,21 +1,10 @@
 import express, { Express } from "express";
 const app: Express = express();
 const port = process.env.PORT || 3000;
-import knex from "knex";
+import { knexInstance } from "./config/knexInstance";
 import { Model } from "objection";
 
 import router from "./src/routes";
-
-const knexInstance = knex({
-  client: "pg",
-  connection: {
-    host: "localhost",
-    port: 5432,
-    user: "postgres",
-    password: "1",
-    database: "project-bootcamp",
-  },
-});
 
 Model.knex(knexInstance);
 
