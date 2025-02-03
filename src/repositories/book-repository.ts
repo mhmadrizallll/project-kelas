@@ -46,36 +46,34 @@ class BookRepository {
   }
 
   async updateBookWithCategories(
+    id: string,
     data: {
-      id?: string;
-      code_book?: string;
-      title?: string;
-      image?: string;
-      author?: string;
-      stock?: number;
-      description?: string;
-      created_by?: string;
+      code_book: string;
+      title: string;
+      image: string;
+      author: string;
+      stock: number;
+      description: string;
+      created_by: string;
     },
-    categoriesIds: string[]
+    categoryIds: string[]
   ) {
     return knexInstance.transaction(async (trx) => {
       // update buku
       const [updatedBook] = await trx("books")
+        .where("id", id)
         .update(data)
-        .where({ id: data.id })
         .returning("*")
         .transacting(trx);
 
       // cek jika ada kategori
-      if (categoriesIds.length > 0) {
-        // update kategori buku
-        await trx("book_category")
-          .where({ book_id: data.id })
-          .delete()
-          .transacting(trx);
+      if (categoryIds.length > 0) {
+        // delete kategori buku lama
+        await trx("book_category").where("book_id", id).del().transacting(trx);
 
-        const bookCategories = categoriesIds.map((categoryId) => ({
-          book_id: data.id,
+        // insert kategori buku baru
+        const bookCategories = categoryIds.map((categoryId) => ({
+          book_id: id,
           category_id: categoryId,
         }));
 

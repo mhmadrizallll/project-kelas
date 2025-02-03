@@ -47,9 +47,28 @@ class BookController {
         category_ids,
       });
 
-      res
-        .status(200)
-        .json({ status: true, message: "Data Book", data: newBook });
+      res.status(200).json({
+        status: true,
+        message: "Data Book",
+        data: { newBook, category_ids },
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async updateBook(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+
+      const updatedBook = await bookService.updateBookWithCategories(id, data);
+
+      res.status(200).json({
+        status: true,
+        message: "Data Book updated",
+        data: updatedBook,
+      });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
