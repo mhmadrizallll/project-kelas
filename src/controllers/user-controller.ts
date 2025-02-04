@@ -14,6 +14,7 @@ class UserController {
     try {
       const reqRole = req.user?.role;
       const reqId = req.user?.id;
+      console.log(reqRole, reqId);
       const users = await userService.getAllUsers(reqRole!, reqId!);
       res
         .status(200)

@@ -84,6 +84,10 @@ class UserService {
         throw new Error("You can't register as admin");
       }
 
+      if (reqRole === "admin" && data.role === "admin") {
+        throw new Error("You can't register as admin");
+      }
+
       const users = await userRepository.getAllUsers();
       if (users.some((user) => user.email === data.email)) {
         throw new Error("Email already registered");

@@ -10,6 +10,12 @@ class BookRepository {
     return await BookModel.query().findById(id).withGraphFetched("categories");
   }
 
+  async getAllBookIsDeletedFalse(role: string) {
+    return await BookModel.query()
+      .where("is_deleted", false)
+      .withGraphFetched("categories");
+  }
+
   async createBookWithCategories(
     data: {
       id: string;
@@ -55,6 +61,7 @@ class BookRepository {
       stock: number;
       description: string;
       created_by: string;
+      updated_by: string;
     },
     categoryIds: string[]
   ) {
@@ -81,6 +88,28 @@ class BookRepository {
       }
 
       return updatedBook;
+    });
+  }
+
+  async softDeleteBookById(
+    id: string,
+    data: { deleted_by: string; restored_by: string | null }
+  ) {
+    return await BookModel.query().patchAndFetchById(id, {
+      is_deleted: true,
+      deleted_by: data.deleted_by,
+      restored_by: data.restored_by,
+    });
+  }
+
+  async restoreBookById(
+    id: string,
+    data: { restored_by: string; deleted_by: string | null }
+  ) {
+    return await BookModel.query().patchAndFetchById(id, {
+      is_deleted: false,
+      restored_by: data.restored_by,
+      deleted_by: data.deleted_by,
     });
   }
 }

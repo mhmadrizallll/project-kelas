@@ -10,6 +10,10 @@ export class BookModel extends Model {
   stock!: number;
   description!: string;
   created_by!: string;
+  is_deleted!: boolean;
+  updated_by!: string | null;
+  deleted_by!: string | null;
+  restored_by!: string | null;
 
   static get tableName() {
     return "books";
