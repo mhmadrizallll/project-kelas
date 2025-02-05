@@ -44,58 +44,32 @@ class RentalService {
       throw new Error(error.message);
     }
   }
-  // async createRental(
-  //   reqRole: string,
-  //   reqId: string,
-  //   data: {
-  //     id: string;
-  //     user_id: string;
-  //     fine: number;
-  //     status: string;
-  //     rental_date: Date;
-  //     due_date: Date;
-  //     return_date: Date | null;
-  //     books_ids: string[];
-  //   }
-  // ) {
-  //   try {
-  //     // Cek apakah user sudah meminjam salah satu buku yang sama dan masih aktif
-  //     const activeRentals = await rentalRepository.getUserActiveById(reqId);
-  //     const rentedBookIds = activeRentals.flatMap((rental) => rental.books_ids);
+  async createRental(userId: string, bookIds: string[]) {
+    // Cek apakah user sudah meminjam buku yang sama
+    const existingRentals = await rentalRepository.checkExistingRental(
+      userId,
+      bookIds
+    );
+    console.log(existingRentals);
+    if (existingRentals.length > 0) {
+      throw new Error("You have already borrowed one of these books.");
+    }
 
-  //     const duplicateBooks = data.books_ids.filter((bookId) =>
-  //       rentedBookIds.includes(bookId)
-  //     );
+    // Cek stok buku dan validasi dengan menampilkan title buku
+    const books = await rentalRepository.checkBookStock(bookIds);
+    const outOfStock = books.filter((book) => book.stock <= 0);
+    if (outOfStock.length > 0) {
+      // throw error pake title buku
+      throw new Error(
+        `Book ${outOfStock[0].title} is out of stock. Please choose another book.`
+      );
+    }
 
-  //     console.log(duplicateBooks);
+    // Buat rental baru
+    const rentalId = await rentalRepository.createRental(userId, bookIds);
 
-  //     if (duplicateBooks.length > 0) {
-  //       throw new Error(
-  //         `You already rented these books: ${duplicateBooks.join(", ")}`
-  //       );
-  //     }
-  //     // jika member dan bukan diri sendiri maka tidak bisa
-  //     //   if (reqRole === "member" && data.user_id !== reqId) {
-  //     //     throw new Error("You can't create rental as member for other user");
-  //     //   }
-  //     const rentaldata = {
-  //       id: v4(),
-  //       user_id: reqId,
-  //       fine: 0,
-  //       status: "borrowed",
-  //       rental_date: new Date(),
-  //       due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-  //       return_date: null,
-  //     };
-  //     const newRental = await rentalRepository.createRental(
-  //       rentaldata,
-  //       data.books_ids
-  //     );
-  //     return newRental;
-  //   } catch (error: any) {
-  //     throw new Error(error.message);
-  //   }
-  // }
+    return { rentalId, message: "Rental created successfully." };
+  }
 }
 const rentalService = new RentalService();
 export { rentalService };

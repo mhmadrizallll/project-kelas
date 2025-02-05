@@ -1,5 +1,6 @@
 import { RentalModel } from "../../models/rental-model";
 import { knexInstance as knex } from "../../config/knexInstance";
+import { v4 } from "uuid";
 
 class RentalRepository {
   async getRentalsByRole(reqRole: string, userId: string) {
@@ -27,35 +28,48 @@ class RentalRepository {
       );
   }
 
-  async createRental(
-    data: {
-      id: string;
-      user_id: string;
-      fine: number;
-      status: string;
-      rental_date: Date;
-      due_date: Date;
-      return_date: Date | null;
-    },
-    bookIds: string[]
-  ) {
+  // Cek apakah user sudah meminjam buku tertentu dan masih aktif
+  async checkExistingRental(userId: string, bookIds: string[]) {
+    return knex("rental_books")
+      .join("rentals", "rental_books.rental_id", "rentals.id")
+      .where("rentals.user_id", userId)
+      .where("rentals.status", "borrowed")
+      .whereIn("rental_books.book_id", bookIds)
+      .select("rental_books.book_id", "rentals.status");
+  }
+
+  // Cek stok buku
+  async checkBookStock(bookIds: string[]) {
+    return knex("books").whereIn("id", bookIds).select("id", "title", "stock");
+  }
+
+  // Buat rental baru
+  async createRental(userId: string, bookIds: string[]) {
     return knex.transaction(async (trx) => {
-      // insert rental
-      const [newRental] = await trx("rentals")
-        .insert(data)
-        .returning("*")
-        .transacting(trx);
+      const rentalData = {
+        id: v4(),
+        user_id: userId,
+        fine: 0,
+        status: "borrowed",
+        rental_date: new Date(),
+        due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 hari ke depan
+        return_date: null,
+      };
 
-      // cek jika gak ada buku
-      if (bookIds.length > 0) {
-        // insert buku rental
-        const bookRental = bookIds.map((bookId) => ({
-          rental_id: newRental.id,
-          book_id: bookId,
-        }));
+      // Insert rental ke tabel rentals
+      await trx("rentals").insert(rentalData);
 
-        await trx("rental_books").insert(bookRental).transacting(trx);
-      }
+      // Insert buku ke rental_books
+      const rentalBooks = bookIds.map((bookId) => ({
+        rental_id: rentalData.id,
+        book_id: bookId,
+      }));
+      await trx("rental_books").insert(rentalBooks);
+
+      // Update stok buku (-1 untuk setiap buku yang dipinjam)
+      await trx("books").whereIn("id", bookIds).decrement("stock", 1);
+
+      return rentalData;
     });
   }
 }

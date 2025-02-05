@@ -30,27 +30,25 @@ class RentalController {
       });
     }
   }
-  // async createRental(req: AuthRequest, res: Response) {
-  //   try {
-  //     const reqRole = req.user?.role;
-  //     const reqId = req.user?.id;
-  //     const data = req.body;
-  //     console.log(reqRole, reqId);
-  //     const newRental = await rentalService.createRental(
-  //       reqRole!,
-  //       reqId!,
-  //       data
-  //     );
-  //     console.log("Debug newRental:", JSON.stringify(newRental, null, 2));
-  //     res.status(200).json({
-  //       status: true,
-  //       message: "Data Rental Created",
-  //       data: newRental,
-  //     });
-  //   } catch (error: any) {
-  //     res.status(500).json({ status: false, error: error.message });
-  //   }
-  // }
+  async createRental(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const userId = req.user?.id!;
+      const { books_ids } = req.body;
+
+      if (!books_ids || books_ids.length === 0) {
+        res.status(400).json({ status: false, message: "No books selected." });
+      }
+
+      const newRental = await rentalService.createRental(userId, books_ids);
+      res.status(201).json({
+        status: true,
+        message: newRental.message,
+        data: { rental_id: newRental.rentalId },
+      });
+    } catch (error: any) {
+      res.status(400).json({ status: false, message: error.message });
+    }
+  }
 }
 
 const rentalController = new RentalController();
