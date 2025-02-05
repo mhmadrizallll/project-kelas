@@ -2,6 +2,31 @@ import { RentalModel } from "../../models/rental-model";
 import { knexInstance as knex } from "../../config/knexInstance";
 
 class RentalRepository {
+  async getRentalsByRole(reqRole: string, userId: string) {
+    return knex("rentals")
+      .join("users", "rentals.user_id", "users.id")
+      .leftJoin("rental_books", "rentals.id", "rental_books.rental_id")
+      .leftJoin("books", "rental_books.book_id", "books.id")
+      .where("users.role", reqRole) // ✅ Hanya berdasarkan role mereka
+      .where("users.id", userId) // ✅ Hanya rental milik user yang login
+      .select(
+        "rentals.id as rental_id",
+        "rentals.user_id",
+        "rentals.status",
+        "rentals.fine",
+        "rentals.rental_date",
+        "rentals.due_date",
+        "rentals.return_date",
+        "books.id as book_id",
+        "books.code_book",
+        "books.title",
+        "books.image",
+        "books.author",
+        "books.stock",
+        "books.description"
+      );
+  }
+
   async createRental(
     data: {
       id: string;

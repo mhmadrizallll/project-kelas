@@ -9,7 +9,7 @@ export async function seed(knex: Knex): Promise<void> {
   await knex("rentals").insert([
     {
       id: v4(),
-      user_id: "a5989a43-4dc8-4842-98b7-f85f19c4784e",
+      user_id: "8fba7755-e72e-4498-aa79-907fbbd4bd50",
       created_at: new Date(),
       updated_at: new Date(),
       fine: 0,
