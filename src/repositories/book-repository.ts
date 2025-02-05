@@ -3,17 +3,22 @@ import { BookModel } from "../../models/book-model";
 
 class BookRepository {
   async getAllBooksWithCategories() {
-    return await BookModel.query().withGraphFetched("categories");
+    return await BookModel.query().withGraphFetched({
+      categories: true,
+      rentals: true,
+    });
   }
 
   async getBookByIdWithCategories(id: string) {
-    return await BookModel.query().findById(id).withGraphFetched("categories");
+    return await BookModel.query()
+      .findById(id)
+      .withGraphFetched({ categories: true, rentals: true });
   }
 
   async getAllBookIsDeletedFalse(role: string) {
     return await BookModel.query()
       .where("is_deleted", false)
-      .withGraphFetched("categories");
+      .withGraphFetched({ categories: true, rentals: true });
   }
 
   async createBookWithCategories(

@@ -16,7 +16,7 @@ class BookController {
       const books = await bookService.getAllBooks(reqRole!);
       res.status(200).json({ status: true, message: "Data Book", data: books });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ status: false, error: error.message });
     }
   }
 
@@ -28,7 +28,7 @@ class BookController {
       const book = await bookService.getBookById(reqRole!, id);
       res.status(200).json({ status: true, message: "Data Book", data: book });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ status: false, error: error.message });
     }
   }
 
@@ -64,7 +64,7 @@ class BookController {
         data: { newBook, category_ids },
       });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ status: false, error: error.message });
     }
   }
 
@@ -86,7 +86,7 @@ class BookController {
         data: updatedBook,
       });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ status: false, error: error.message });
     }
   }
 
@@ -102,7 +102,7 @@ class BookController {
         data: deletedBook,
       });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ staus: false, error: error.message });
     }
   }
 
@@ -117,7 +117,7 @@ class BookController {
         data: restoredBook,
       });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ status: false, error: error.message });
     }
   }
 }

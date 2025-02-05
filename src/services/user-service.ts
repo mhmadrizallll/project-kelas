@@ -166,6 +166,13 @@ class UserService {
         throw new Error("You can't update admin as admin");
       }
 
+      // jika role memmber dan mau update role diri sendiri jadi admin maka tidak bisa
+      if (reqRole === "member" && checkUser.id === reqId) {
+        if (data.role === "admin") {
+          throw new Error("You can't update role as member");
+        }
+      }
+
       if (data.password) {
         const hashedPassword = await hashPassword(data.password);
         data.password = hashedPassword;

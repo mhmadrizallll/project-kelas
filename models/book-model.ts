@@ -1,5 +1,6 @@
 import { Model, ModelObject } from "objection";
 import { CategoryModel } from "./category-model";
+import { RentalModel } from "./rental-model";
 
 export class BookModel extends Model {
   id!: string;
@@ -31,6 +32,18 @@ export class BookModel extends Model {
             to: "book_category.category_id",
           },
           to: "categories.id",
+        },
+      },
+      rentals: {
+        relation: Model.ManyToManyRelation,
+        modelClass: RentalModel,
+        join: {
+          from: "books.id",
+          through: {
+            from: "rental_books.book_id",
+            to: "rental_books.rental_id",
+          },
+          to: "rentals.id",
         },
       },
     };

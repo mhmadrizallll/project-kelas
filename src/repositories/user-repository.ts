@@ -2,11 +2,13 @@ import { UserModel } from "../../models/user-model";
 
 class UserRepository {
   async getAllUsers(): Promise<UserModel[]> {
-    return await UserModel.query();
+    return await UserModel.query().withGraphFetched("rentals.books");
   }
 
   async getUserByRole(role: string): Promise<UserModel[]> {
-    return await UserModel.query().where({ role });
+    return await UserModel.query()
+      .where({ role })
+      .withGraphFetched("rentals.books");
   }
 
   async getUserById(id: string): Promise<UserModel> {
