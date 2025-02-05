@@ -40,37 +40,38 @@ class RentalRepository {
 
   // Cek stok buku
   async checkBookStock(bookIds: string[]) {
-    return knex("books").whereIn("id", bookIds).select("id", "title", "stock");
+    return knex("books").whereIn("id", bookIds);
   }
 
   // Buat rental baru
-  async createRental(userId: string, bookIds: string[]) {
-    return knex.transaction(async (trx) => {
-      const rentalData = {
-        id: v4(),
-        user_id: userId,
-        fine: 0,
-        status: "borrowed",
-        rental_date: new Date(),
-        due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 hari ke depan
-        return_date: null,
-      };
+  async createRental(
+    userId: string,
+    bookIds: string[],
+    rentalData: {
+      id: string;
+      user_id: string;
+      status: string;
+      fine: number;
+      rental_date: Date;
+      due_date: Date;
+      return_date: Date | null;
+    }
+  ) {
+    return await knex("rentals").insert(rentalData);
+  }
 
-      // Insert rental ke tabel rentals
-      await trx("rentals").insert(rentalData);
+  async createBookToRentalBooks(
+    rentalData: {
+      rental_id: string;
+      book_id: string;
+    }[],
+    bookId: string[]
+  ) {
+    return knex("rental_books").insert(rentalData);
+  }
 
-      // Insert buku ke rental_books
-      const rentalBooks = bookIds.map((bookId) => ({
-        rental_id: rentalData.id,
-        book_id: bookId,
-      }));
-      await trx("rental_books").insert(rentalBooks);
-
-      // Update stok buku (-1 untuk setiap buku yang dipinjam)
-      await trx("books").whereIn("id", bookIds).decrement("stock", 1);
-
-      return rentalData;
-    });
+  async updateDecrementBookStock(bookId: string[]) {
+    return knex("books").whereIn("id", bookId).decrement("stock", 1);
   }
 }
 

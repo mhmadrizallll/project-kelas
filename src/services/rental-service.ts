@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
 import { rentalRepository } from "../repositories/rental-repository";
+import { knexInstance as knex } from "../../config/knexInstance";
 
 class RentalService {
   async getRentalsByRole(reqRole: string, userId: string) {
@@ -50,7 +51,7 @@ class RentalService {
       userId,
       bookIds
     );
-    console.log(existingRentals);
+    // console.log(existingRentals);
     if (existingRentals.length > 0) {
       throw new Error("You have already borrowed one of these books.");
     }
@@ -58,17 +59,40 @@ class RentalService {
     // Cek stok buku dan validasi dengan menampilkan title buku
     const books = await rentalRepository.checkBookStock(bookIds);
     const outOfStock = books.filter((book) => book.stock <= 0);
+    console.log(outOfStock);
     if (outOfStock.length > 0) {
       // throw error pake title buku
       throw new Error(
         `Book ${outOfStock[0].title} is out of stock. Please choose another book.`
       );
     }
+    // Buat rental
+    return knex.transaction(async (trx) => {
+      // kirim payloadnya
+      const rentalData = {
+        id: v4(),
+        user_id: userId,
+        fine: 0,
+        status: "borrowed",
+        rental_date: new Date(),
+        due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 hari ke depan
+        return_date: null,
+      };
 
-    // Buat rental baru
-    const rentalId = await rentalRepository.createRental(userId, bookIds);
+      await rentalRepository.createRental(userId, bookIds, rentalData);
 
-    return { rentalId, message: "Rental created successfully." };
+      // inser book ke rental_books
+      const rentalBooks = bookIds.map((bookId) => ({
+        rental_id: rentalData.id,
+        book_id: bookId,
+      }));
+      await rentalRepository.createBookToRentalBooks(rentalBooks, bookIds);
+
+      // Update stock buku
+      await rentalRepository.updateDecrementBookStock(bookIds);
+
+      return rentalData;
+    });
   }
 }
 const rentalService = new RentalService();
