@@ -1,5 +1,7 @@
-import { knexInstance } from "./../../config/knexInstance";
+import { knexInstance as knex } from "./../../config/knexInstance";
 import { BookModel } from "../../models/book-model";
+
+import { Book } from "../interfaces/book-interfaces";
 
 class BookRepository {
   async getAllBooksWithCategories() {
@@ -20,80 +22,57 @@ class BookRepository {
       .where("is_deleted", false)
       .withGraphFetched({ categories: true, rentals: true });
   }
-
-  async createBookWithCategories(
-    data: {
-      id: string;
-      code_book: string;
-      title: string;
-      image: string;
-      author: string;
-      stock: number;
-      description: string;
-      created_by: string;
-    },
-    categoriesIds: string[]
-  ) {
-    return knexInstance.transaction(async (trx) => {
-      // insert buku
-      const [newBook] = await trx("books")
-        .insert(data)
-        .returning("*")
-        .transacting(trx);
-
-      // cek jika ada kategori
-      if (categoriesIds.length > 0) {
-        // insert kategori buku
-        const bookCategories = categoriesIds.map((categoryId) => ({
-          book_id: newBook.id,
-          category_id: categoryId,
-        }));
-
-        await trx("book_category").insert(bookCategories).transacting(trx);
-      }
-
-      return newBook;
-    });
+  // Create Books
+  // cek unique code book
+  async checkUniqueCodeBook(codeBook: string) {
+    return await BookModel.query().where("code_book", codeBook).first();
   }
 
-  async updateBookWithCategories(
-    id: string,
-    data: {
-      code_book: string;
-      title: string;
-      image: string;
-      author: string;
-      stock: number;
-      description: string;
-      created_by: string;
-      updated_by: string;
-    },
-    categoryIds: string[]
+  // create books
+  async createBooks(dataBooks: Book) {
+    return await knex("books").insert(dataBooks).returning("*");
+  }
+
+  // create category to book_category
+  async createCategoryBookCategory(
+    dataBookCategory: {
+      book_id: string;
+      category_id: string;
+    }[],
+    catetoryId: string[]
   ) {
-    return knexInstance.transaction(async (trx) => {
-      // update buku
-      const [updatedBook] = await trx("books")
-        .where("id", id)
-        .update(data)
-        .returning("*")
-        .transacting(trx);
+    return await knex("book_category").insert(dataBookCategory).returning("*");
+  }
 
-      // cek jika ada kategori
-      if (categoryIds.length > 0) {
-        // delete kategori buku lama
-        await trx("book_category").where("book_id", id).del().transacting(trx);
+  //  end create
 
-        // insert kategori buku baru
-        const bookCategories = categoryIds.map((categoryId) => ({
-          book_id: id,
-          category_id: categoryId,
-        }));
+  // update
+  // cek data book ada atau tidak
+  async chekBookById(id: string) {
+    return await knex("books").where("id", id).first();
+  }
 
-        await trx("book_category").insert(bookCategories).transacting(trx);
-      }
+  async getBookCategories(id: string) {
+    return await knex("book_category").where("book_id", id);
+  }
+  // create Update Book
+  async updateBook(id: string, data: Book) {
+    return knex("books").where("id", id).update(data).returning("*");
+  }
 
-      return updatedBook;
-    });
+  //  delete category jika ada
+  async deleteCategoryBookCategory(id: string) {
+    return await knex("book_category").where("book_id", id).del();
+  }
+
+  // inser category jika ada
+  async insertCategoryBookCategory(
+    dataBookCategory: {
+      book_id: string;
+      category_id: string;
+    }[]
+  ) {
+    return await knex("book_category").insert(dataBookCategory).returning("*");
   }
 
   async softDeleteBookById(

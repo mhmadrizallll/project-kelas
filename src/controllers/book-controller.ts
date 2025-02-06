@@ -1,5 +1,6 @@
+import { Book } from "../interfaces/book-interfaces";
 import { bookService } from "../services/book-service";
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 
 interface AuthRequest extends Request {
   user?: {
@@ -34,34 +35,29 @@ class BookController {
 
   async createBook(req: AuthRequest, res: Response) {
     try {
-      const {
-        code_book,
-        title,
-        image,
-        author,
-        stock,
-        description,
-        created_by,
-        category_ids,
-      } = req.body;
+      const payload: Partial<Book> = {
+        code_book: req.body.code_book,
+        title: req.body.title,
+        image: req.body.image,
+        author: req.body.author,
+        stock: req.body.stock,
+        description: req.body.description,
+        created_by: req.body.created_by,
+      };
+
+      const data: { book: Book; category_ids: string[] } = {
+        book: payload as Book,
+        category_ids: req.body.category_ids,
+      };
 
       const reqRole = req.user?.role;
 
-      const newBook = await bookService.createBook(reqRole!, {
-        code_book,
-        title,
-        image,
-        author,
-        stock,
-        description,
-        created_by,
-        category_ids,
-      });
+      const newBook = await bookService.createBook(reqRole!, data);
 
       res.status(200).json({
         status: true,
         message: "Data Book",
-        data: { newBook, category_ids },
+        data: { newBook },
       });
     } catch (error: any) {
       res.status(500).json({ status: false, error: error.message });
@@ -71,7 +67,20 @@ class BookController {
   async updateBook(req: AuthRequest, res: Response) {
     try {
       const { id } = req.params;
-      const data = req.body;
+      const payload: Partial<Book> = {
+        code_book: req.body.code_book,
+        title: req.body.title,
+        image: req.body.image,
+        author: req.body.author,
+        stock: req.body.stock,
+        description: req.body.description,
+        created_by: req.body.created_by,
+      };
+
+      const data: { book: Book; category_ids: string[] } = {
+        book: payload as Book,
+        category_ids: req.body.category_ids,
+      };
       const reqRole = req.user?.role;
       console.log(reqRole);
       const updatedBook = await bookService.updateBookWithCategories(
@@ -83,7 +92,7 @@ class BookController {
       res.status(200).json({
         status: true,
         message: "Data Book updated",
-        data: updatedBook,
+        data,
       });
     } catch (error: any) {
       res.status(500).json({ status: false, error: error.message });
@@ -119,6 +128,11 @@ class BookController {
     } catch (error: any) {
       res.status(500).json({ status: false, error: error.message });
     }
+  }
+
+  async uploadImage(req: Request, res: Response) {
+    const url = `/uploads/${req.file?.filename}`;
+    res.status(200).json({ message: "Image uploaded", data: url });
   }
 }
 

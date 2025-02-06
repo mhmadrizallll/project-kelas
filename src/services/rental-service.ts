@@ -46,58 +46,72 @@ class RentalService {
     }
   }
   async createRental(userId: string, bookIds: string[]) {
-    // Cek apakah user sudah meminjam buku yang sama
-    const existingRentals = await rentalRepository.checkExistingRental(
-      userId,
-      bookIds
-    );
-    // console.log(existingRentals);
-    if (existingRentals.length > 0) {
-      throw new Error("You have already borrowed one of these books.");
-    }
-
-    // setiap rental_id hanya bisa meminjam 1 buku
-    if (bookIds.length > 1) {
-      throw new Error("hanya bisa pinjam 1 buku yahhh");
-    }
-
-    // Cek stok buku dan validasi dengan menampilkan title buku
-    const books = await rentalRepository.checkBookStock(bookIds);
-    const outOfStock = books.filter((book) => book.stock <= 0);
-    console.log(outOfStock);
-    if (outOfStock.length > 0) {
-      // throw error pake title buku
-      throw new Error(
-        `Book ${outOfStock[0].title} is out of stock. Please choose another book.`
+    try {
+      // Validasi apakah bookIds ada dan merupakan array yang tidak kosong
+      if (!bookIds || !Array.isArray(bookIds) || bookIds.length === 0) {
+        throw new Error("You must provide at least one book to borrow.");
+      }
+      // Cek apakah user sudah meminjam buku yang sama
+      const existingRentals = await rentalRepository.checkExistingRental(
+        userId,
+        bookIds
       );
+      // console.log(existingRentals);
+      if (existingRentals.length > 0) {
+        throw new Error("You have already borrowed one of these books.");
+      }
+
+      // setiap rental_id hanya bisa meminjam 1 buku
+      if (bookIds.length > 1) {
+        throw new Error("hanya bisa pinjam 1 buku yahhh");
+      }
+
+      // cek jika bookid gak ada dalam book table
+      const book = await rentalRepository.checkBookIdNothingBookTable(bookIds);
+      if (book.length > 0) {
+        throw new Error("Book not found, please choose another book.");
+      }
+
+      // Cek stok buku dan validasi dengan menampilkan title buku
+      const books = await rentalRepository.checkBookStock(bookIds);
+      const outOfStock = books.filter((book) => book.stock <= 0);
+      console.log(outOfStock);
+      if (outOfStock.length > 0) {
+        // throw error pake title buku
+        throw new Error(
+          `Book ${outOfStock[0].title} is out of stock. Please choose another book.`
+        );
+      }
+      // Buat rental
+      return knex.transaction(async (trx) => {
+        // kirim payloadnya
+        const rentalData = {
+          id: v4(),
+          user_id: userId,
+          fine: 0,
+          status: "borrowed",
+          rental_date: new Date(),
+          due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 hari ke depan
+          return_date: null,
+        };
+
+        await rentalRepository.createRental(userId, bookIds, rentalData);
+
+        // inser book ke rental_books
+        const rentalBooks = bookIds.map((bookId) => ({
+          rental_id: rentalData.id,
+          book_id: bookId,
+        }));
+        await rentalRepository.createBookToRentalBooks(rentalBooks, bookIds);
+
+        // Update stock buku
+        await rentalRepository.updateDecrementBookStock(bookIds);
+
+        return rentalData;
+      });
+    } catch (error: any) {
+      throw new Error(error.message);
     }
-    // Buat rental
-    return knex.transaction(async (trx) => {
-      // kirim payloadnya
-      const rentalData = {
-        id: v4(),
-        user_id: userId,
-        fine: 0,
-        status: "borrowed",
-        rental_date: new Date(),
-        due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 hari ke depan
-        return_date: null,
-      };
-
-      await rentalRepository.createRental(userId, bookIds, rentalData);
-
-      // inser book ke rental_books
-      const rentalBooks = bookIds.map((bookId) => ({
-        rental_id: rentalData.id,
-        book_id: bookId,
-      }));
-      await rentalRepository.createBookToRentalBooks(rentalBooks, bookIds);
-
-      // Update stock buku
-      await rentalRepository.updateDecrementBookStock(bookIds);
-
-      return rentalData;
-    });
   }
   async returnRental(userId: string, rentalId: string) {
     // Cek apakah rental valid dan masih aktif

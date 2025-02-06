@@ -35,9 +35,6 @@ class RentalController {
       const userId = req.user?.id!;
       const { books_ids } = req.body;
       console.log(userId);
-      if (!books_ids || books_ids.length === 0) {
-        res.status(400).json({ status: false, message: "No books selected." });
-      }
 
       const newRental = await rentalService.createRental(userId, books_ids);
       res.status(201).json({
@@ -54,12 +51,6 @@ class RentalController {
     try {
       const userId = req.user?.id!;
       const { rental_id } = req.body;
-
-      if (!rental_id) {
-        res
-          .status(400)
-          .json({ status: false, message: "Rental ID is required." });
-      }
 
       const result = await rentalService.returnRental(userId, rental_id);
       res
