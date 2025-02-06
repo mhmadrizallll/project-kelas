@@ -49,6 +49,26 @@ class RentalController {
       res.status(400).json({ status: false, message: error.message });
     }
   }
+
+  async returnRental(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const userId = req.user?.id!;
+      const { rental_id } = req.body;
+
+      if (!rental_id) {
+        res
+          .status(400)
+          .json({ status: false, message: "Rental ID is required." });
+      }
+
+      const result = await rentalService.returnRental(userId, rental_id);
+      res
+        .status(200)
+        .json({ status: true, message: result.message, fine: result.fine });
+    } catch (error: any) {
+      res.status(400).json({ status: false, message: error.message });
+    }
+  }
 }
 
 const rentalController = new RentalController();

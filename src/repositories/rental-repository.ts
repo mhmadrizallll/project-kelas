@@ -59,7 +59,7 @@ class RentalRepository {
   ) {
     return await knex("rentals").insert(rentalData);
   }
-
+  // Crate rental_books
   async createBookToRentalBooks(
     rentalData: {
       rental_id: string;
@@ -69,9 +69,37 @@ class RentalRepository {
   ) {
     return knex("rental_books").insert(rentalData);
   }
-
+  // Kurangi stock buku
   async updateDecrementBookStock(bookId: string[]) {
     return knex("books").whereIn("id", bookId).decrement("stock", 1);
+  }
+
+  // Cek rental aktif berdasarkan rentalId dan userId
+  async getActiveRentalById(rentalId: string, userId: string) {
+    return knex("rentals")
+      .where("id", rentalId)
+      .where("user_id", userId)
+      .where("status", "borrowed")
+      .first();
+  }
+
+  // Ambil daftar buku dalam rental
+  async getRentalBooks(rentalId: string) {
+    return knex("rental_books").where("rental_id", rentalId).select("book_id");
+  }
+
+  // Update rental menjadi "returned" & set denda
+  async updateRentalReturn(rentalId: string, fine: number) {
+    return knex("rentals").where("id", rentalId).update({
+      status: "returned",
+      return_date: new Date(),
+      fine: fine,
+    });
+  }
+
+  // Tambah stok buku kembali
+  async restoreBookStock(bookIds: string[]) {
+    return knex("books").whereIn("id", bookIds).increment("stock", 1);
   }
 }
 
