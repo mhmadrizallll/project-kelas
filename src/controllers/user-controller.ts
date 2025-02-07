@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { userService } from "../services/user-service";
+import { AppError } from "../utils/error";
 
 interface AuthenticatedRequest extends express.Request {
   user?: {
@@ -14,13 +15,14 @@ class UserController {
     try {
       const reqRole = req.user?.role;
       const reqId = req.user?.id;
-      console.log(reqRole, reqId);
+      // console.log(reqRole, reqId);
       const users = await userService.getAllUsers(reqRole!, reqId!);
       res
         .status(200)
         .json({ status: true, message: "Data Users", data: users });
     } catch (error: any) {
-      res.status(500).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -35,10 +37,11 @@ class UserController {
         role: defaultRole,
       });
       res
-        .status(200)
+        .status(201)
         .json({ status: true, message: "Register successful", data: payload });
     } catch (error: any) {
-      res.status(500).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -57,7 +60,8 @@ class UserController {
         .status(200)
         .json({ status: true, message: "Register successful", data: payload });
     } catch (error: any) {
-      res.status(500).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
   async login(req: Request, res: Response) {
@@ -68,7 +72,8 @@ class UserController {
         .status(200)
         .json({ status: true, message: "Login successful", data: payload });
     } catch (error: any) {
-      res.status(500).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -86,10 +91,11 @@ class UserController {
         role,
       });
       res
-        .status(200)
+        .status(201)
         .json({ status: true, message: "User updated", data: payload });
     } catch (error: any) {
-      res.status(500).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -103,7 +109,8 @@ class UserController {
         .status(200)
         .json({ status: true, message: "User deleted", data: payload });
     } catch (error: any) {
-      res.status(500).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 

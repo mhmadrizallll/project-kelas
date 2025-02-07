@@ -29,9 +29,9 @@ class RentalRepository {
   }
   // Create
   // cek bukuid tidak ada dalam book table
-  async checkBookIdNothingBookTable(bookIds: string[]) {
-    return knex("books").whereNotIn("id", bookIds);
-  }
+  // async checkBookIdNothingBookTable(bookIds: string[]) {
+  //   return knex("books").whereNotIn("id", bookIds);
+  // }
   // Cek apakah user sudah meminjam buku tertentu dan masih aktif
   async checkExistingRental(userId: string, bookIds: string[]) {
     return knex("rental_books")
@@ -86,6 +86,7 @@ class RentalRepository {
       .where("id", rentalId)
       .where("user_id", userId)
       .where("status", "borrowed")
+      .returning("*")
       .first();
   }
 
@@ -106,6 +107,10 @@ class RentalRepository {
   // Tambah stok buku kembali
   async restoreBookStock(bookIds: string[]) {
     return knex("books").whereIn("id", bookIds).increment("stock", 1);
+  }
+
+  async getRentalAfterUpdate(rentalId: string) {
+    return knex("rentals").where("id", rentalId).returning("*").first();
   }
 }
 

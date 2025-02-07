@@ -2,6 +2,7 @@ import { stat } from "fs";
 import { rentalService } from "../services/rental-service";
 
 import express, { Request, Response } from "express";
+import { AppError } from "../utils/error";
 
 interface AuthRequest extends Request {
   user?: {
@@ -15,7 +16,7 @@ class RentalController {
     try {
       const userId = req.user?.id; // Ambil ID user dari middleware auth
       const reqRole = req.user?.role; // Ambil role user
-      console.log(reqRole);
+      // console.log(reqRole);
       const rentals = await rentalService.getRentalsByRole(reqRole!, userId!);
 
       res.status(200).json({
@@ -34,7 +35,7 @@ class RentalController {
     try {
       const userId = req.user?.id!;
       const { books_ids } = req.body;
-      console.log(userId);
+      // console.log(userId);
 
       const newRental = await rentalService.createRental(userId, books_ids);
       res.status(201).json({
@@ -43,7 +44,8 @@ class RentalController {
         data: { rental_id: newRental },
       });
     } catch (error: any) {
-      res.status(400).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -53,11 +55,15 @@ class RentalController {
       const { rental_id } = req.body;
 
       const result = await rentalService.returnRental(userId, rental_id);
-      res
-        .status(200)
-        .json({ status: true, message: result.message, fine: result.fine });
+      // console.log(result, "result nya ahgaghagaga");
+      res.status(200).json({
+        status: true,
+        message: "Rental returned successfully",
+        data: result,
+      });
     } catch (error: any) {
-      res.status(400).json({ status: false, message: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 }

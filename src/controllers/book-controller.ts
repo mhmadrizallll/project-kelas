@@ -1,6 +1,7 @@
 import { Book } from "../interfaces/book-interfaces";
 import { bookService } from "../services/book-service";
 import { Request, Response } from "express";
+import { AppError } from "../utils/error";
 
 interface AuthRequest extends Request {
   user?: {
@@ -13,11 +14,12 @@ class BookController {
   async getAllBooks(req: AuthRequest, res: Response) {
     try {
       const reqRole = req.user?.role;
-      console.log(reqRole);
+      // console.log(reqRole);
       const books = await bookService.getAllBooks(reqRole!);
       res.status(200).json({ status: true, message: "Data Book", data: books });
     } catch (error: any) {
-      res.status(500).json({ status: false, error: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -25,11 +27,12 @@ class BookController {
     try {
       const { id } = req.params;
       const reqRole = req.user?.role;
-      console.log(reqRole);
+      // console.log(reqRole);
       const book = await bookService.getBookById(reqRole!, id);
       res.status(200).json({ status: true, message: "Data Book", data: book });
     } catch (error: any) {
-      res.status(500).json({ status: false, error: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -54,13 +57,14 @@ class BookController {
 
       const newBook = await bookService.createBook(reqRole!, data);
 
-      res.status(200).json({
+      res.status(201).json({
         status: true,
         message: "Data Book",
         data: { newBook },
       });
     } catch (error: any) {
-      res.status(500).json({ status: false, error: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -82,7 +86,7 @@ class BookController {
         category_ids: req.body.category_ids,
       };
       const reqRole = req.user?.role;
-      console.log(reqRole);
+      // console.log(reqRole);
       const updatedBook = await bookService.updateBookWithCategories(
         reqRole!,
         id,
@@ -92,10 +96,11 @@ class BookController {
       res.status(200).json({
         status: true,
         message: "Data Book updated",
-        data,
+        data: updatedBook,
       });
     } catch (error: any) {
-      res.status(500).json({ status: false, error: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -103,7 +108,7 @@ class BookController {
     try {
       const { id } = req.params;
       const reqRole = req.user?.role;
-      console.log(reqRole);
+      // console.log(reqRole);
       const deletedBook = await bookService.deleteBook(reqRole!, id);
       res.status(200).json({
         status: true,
@@ -111,7 +116,8 @@ class BookController {
         data: deletedBook,
       });
     } catch (error: any) {
-      res.status(500).json({ staus: false, error: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
@@ -126,7 +132,8 @@ class BookController {
         data: restoredBook,
       });
     } catch (error: any) {
-      res.status(500).json({ status: false, error: error.message });
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
     }
   }
 
