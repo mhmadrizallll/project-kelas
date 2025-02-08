@@ -21,6 +21,23 @@ const config: { [key: string]: Knex.Config } = {
       directory: "./seeds",
     },
   },
+  testing: {
+    client: "pg",
+    connection: {
+      user: "postgres",
+      password: "1",
+      database: "project-bootcamp",
+      host: "localhost",
+      port: 5432,
+    },
+    migrations: {
+      tableName: "knex_migrations",
+      directory: "./migrations",
+    },
+    seeds: {
+      directory: "./seeds",
+    },
+  },
 };
 
 export default config;
