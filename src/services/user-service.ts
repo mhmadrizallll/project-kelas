@@ -2,7 +2,7 @@ import { userRepository } from "../repositories/user-repository";
 import { hashPassword, comparePassword } from "../utils/bcrypt";
 import { v4 } from "uuid";
 import { generateToken } from "../utils/jwt";
-import { AppError } from "../utils/error";
+import { AppError } from "../helpers/error";
 
 class UserService {
   async getAllUsers(reqRole: string, reqId: string) {

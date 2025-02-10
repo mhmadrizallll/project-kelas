@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { userService } from "../services/user-service";
-import { AppError } from "../utils/error";
+import { AppError } from "../helpers/error";
 
 interface AuthenticatedRequest extends express.Request {
   user?: {

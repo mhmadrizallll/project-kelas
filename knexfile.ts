@@ -21,12 +21,13 @@ const config: { [key: string]: Knex.Config } = {
       directory: "./seeds",
     },
   },
-  testing: {
+  test: {
+    // Ubah dari "testing" ke "test"
     client: "pg",
     connection: {
       user: "postgres",
       password: "1",
-      database: "project-bootcamp",
+      database: "project-bootcamp", // Pastikan database terpisah untuk testing
       host: "localhost",
       port: 5432,
     },

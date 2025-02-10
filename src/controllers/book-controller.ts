@@ -1,7 +1,7 @@
 import { Book } from "../interfaces/book-interfaces";
 import { bookService } from "../services/book-service";
 import { Request, Response } from "express";
-import { AppError } from "../utils/error";
+import { AppError } from "../helpers/error";
 
 interface AuthRequest extends Request {
   user?: {

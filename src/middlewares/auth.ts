@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../utils/jwt";
+import { AppError } from "../helpers/error";
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -27,7 +28,7 @@ const authMiddleware = async (
     // console.log("ini adalah token dari roleeee", user);
     next();
   } catch (error: any) {
-    throw new Error(error.message);
+    res.status(401).json({ status: false, message: error.message });
   }
 };
 

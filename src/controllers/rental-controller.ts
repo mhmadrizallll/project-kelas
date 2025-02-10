@@ -2,7 +2,7 @@ import { stat } from "fs";
 import { rentalService } from "../services/rental-service";
 
 import express, { Request, Response } from "express";
-import { AppError } from "../utils/error";
+import { AppError } from "../helpers/error";
 
 interface AuthRequest extends Request {
   user?: {

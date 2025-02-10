@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 import { Book } from "../interfaces/book-interfaces";
 import fs from "fs";
 import path from "path";
-import { AppError } from "../utils/error";
+import { AppError } from "../helpers/error";
 class BookService {
   async getAllBooks(reqRole: string) {
     if (reqRole !== "admin") {

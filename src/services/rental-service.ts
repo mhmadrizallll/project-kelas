@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 import { rentalRepository } from "../repositories/rental-repository";
 import { knexInstance as knex } from "../../config/knexInstance";
-import { AppError } from "../utils/error";
+import { AppError } from "../helpers/error";
 
 class RentalService {
   async getRentalsByRole(reqRole: string, userId: string) {
