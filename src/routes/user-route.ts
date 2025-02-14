@@ -11,8 +11,8 @@ router.post(
   authMiddleware,
   userController.registerLogging
 );
-router.put("/:id", authMiddleware, userController.updateUser);
-router.delete("/:id", authMiddleware, userController.deleteUser);
+router.put("/update/:id", authMiddleware, userController.updateUser);
+router.delete("/delete/:id", authMiddleware, userController.deleteUser);
 router.put("/restore/:id", authMiddleware, userController.restoreUser);
 
 export default router;
