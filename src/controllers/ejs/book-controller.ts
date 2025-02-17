@@ -1,7 +1,7 @@
-import { Book } from "../interfaces/book-interfaces";
-import { bookService } from "../services/book-service";
+import { Book } from "../../interfaces/book-interfaces";
+import { bookService } from "../../services/book-service";
 import { Request, Response } from "express";
-import { AppError } from "../helpers/error";
+import { AppError } from "../../helpers/error";
 
 interface AuthRequest extends Request {
   user?: {
@@ -16,7 +16,14 @@ class BookController {
       const reqRole = req.user?.role;
       // console.log(reqRole);
       const books = await bookService.getAllBooks(reqRole!);
-      res.status(200).json({ status: true, message: "Data Book", data: books });
+      const isAuthenticated = !!req.user; // Cek apakah user login
+
+      res.status(200).render("index", {
+        status: true,
+        message: "Data Book",
+        data: books,
+        isAuthenticated,
+      });
     } catch (error: any) {
       const statusCode = error instanceof AppError ? error.status : 500;
       res.status(statusCode).json({ status: false, message: error.message });
@@ -29,7 +36,8 @@ class BookController {
       const reqRole = req.user?.role;
       // console.log(reqRole);
       const book = await bookService.getBookById(reqRole!, id);
-      res.status(200).json({ status: true, message: "Data Book", data: book });
+      // const isAuthenticated = !!req.user; // Cek apakah user login
+      res.status(200).render("books", { data: book });
     } catch (error: any) {
       const statusCode = error instanceof AppError ? error.status : 500;
       res.status(statusCode).json({ status: false, message: error.message });
@@ -87,16 +95,14 @@ class BookController {
       };
       const reqRole = req.user?.role;
       // console.log(reqRole);
-      const updatedBook = await bookService.updateBookWithCategories(
-        reqRole!,
-        id,
-        data
-      );
+      await bookService.updateBookWithCategories(reqRole!, id, data);
+
+      const book = await bookService.getBookById(reqRole!, id);
 
       res.status(200).json({
         status: true,
         message: "Data Book updated",
-        data: updatedBook,
+        data: book,
       });
     } catch (error: any) {
       const statusCode = error instanceof AppError ? error.status : 500;

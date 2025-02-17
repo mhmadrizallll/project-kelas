@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { userService } from "../services/user-service";
-import { AppError } from "../helpers/error";
+import { userService } from "../../services/user-service";
+import { AppError } from "../../helpers/error";
 
 interface AuthenticatedRequest extends express.Request {
   user?: {
@@ -59,6 +59,15 @@ class UserController {
       res
         .status(200)
         .json({ status: true, message: "Register successful", data: payload });
+    } catch (error: any) {
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
+    }
+  }
+
+  async loginForm(req: Request, res: Response) {
+    try {
+      res.status(200).render("login");
     } catch (error: any) {
       const statusCode = error instanceof AppError ? error.status : 500;
       res.status(statusCode).json({ status: false, message: error.message });

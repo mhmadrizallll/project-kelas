@@ -131,6 +131,11 @@ class BookService {
       );
     }
 
+    // jika tidak ada gambar di input, gunakan gambar lama
+    if (!data.book.image) {
+      data.book.image = existingBook.image;
+    }
+
     return knex.transaction(async (trx) => {
       const payload = {
         ...existingBook, // Pakai data lama

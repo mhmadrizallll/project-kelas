@@ -7,8 +7,8 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex("rental_books").insert([
     {
-      rental_id: "1675c66d-d133-4086-a970-85a464a927e6",
-      book_id: "10cf7e36-76f5-46c2-9f71-eb0e62717861",
+      rental_id: "b1446380-9d91-49f0-890d-3257b14271b9",
+      book_id: "f18f241d-16d1-439a-bee6-292ad850ab0b",
     },
   ]);
 }

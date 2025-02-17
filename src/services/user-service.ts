@@ -129,7 +129,7 @@ class UserService {
     data: {
       name: string;
       email: string;
-      password?: string;
+      password: string;
       role: string;
     }
   ) {
@@ -179,8 +179,15 @@ class UserService {
       throw new AppError(404, "User already deleted");
     }
 
-    if (reqRole === "member" && targetDelete.id !== reqId) {
-      throw new AppError(403, "You can't delete user as member");
+    // if (reqRole === "member" && targetDelete.id !== reqId) {
+    //   throw new AppError(403, "You can't delete user as member");
+    // }
+
+    if (reqRole === "member") {
+      throw new AppError(
+        403,
+        "You can't delete user as member, please contact admin"
+      );
     }
 
     if (reqRole === "admin" && targetDelete.role !== "member") {
@@ -201,8 +208,15 @@ class UserService {
       throw new AppError(404, "User is not deleted");
     }
 
-    if (reqRole === "member" && targetRestore.id !== reqId) {
-      throw new AppError(403, "You can't restore user as member");
+    // if (reqRole === "member" && targetRestore.id !== reqId) {
+    //   throw new AppError(403, "You can't restore user as member");
+    // }
+
+    if (reqRole === "member") {
+      throw new AppError(
+        403,
+        "You can't restore user as member, please contact admin"
+      );
     }
 
     if (reqRole === "admin" && targetRestore.role !== "member") {

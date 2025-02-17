@@ -1,9 +1,9 @@
-import express, { Express } from "express";
+import express from "express";
 const router = express.Router();
-import { bookController } from "../controllers/book-controller";
-import authMiddleware from "../middlewares/auth";
-import { uploadImage } from "../middlewares/upload-image";
-import { uploadImageUpdate } from "../middlewares/upload-image-update";
+import { bookController } from "../../controllers/api/book-controller";
+import authMiddleware from "../../middlewares/auth";
+import { uploadImage } from "../../middlewares/upload-image";
+import { uploadImageUpdate } from "../../middlewares/upload-image-update";
 
 router.get("/", authMiddleware, bookController.getAllBooks);
 router.get("/:id", authMiddleware, bookController.getBookById);
