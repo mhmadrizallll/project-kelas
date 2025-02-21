@@ -121,6 +121,14 @@ class BookService {
     const existingBook = await bookRepository.chekBookById(id);
     if (!existingBook) throw new AppError(404, "Book not found");
 
+    // jika mau mengubah code_book yang sama dengan yang ada di db, throw error
+    if (data.book.code_book !== existingBook.code_book) {
+      const exitingBook = await bookRepository.checkUniqueCodeBook(
+        data.book.code_book
+      );
+      if (exitingBook) throw new AppError(400, `book already exist with code`);
+    }
+
     // 🔹 **Hapus gambar lama jika ada gambar baru**
     if (data.book.image && existingBook.image) {
       fs.unlink(

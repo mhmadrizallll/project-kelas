@@ -20,6 +20,11 @@ class UserService {
     }
   }
 
+  async getUserById(id: string) {
+    const users = await userRepository.getUserById(id);
+    return users;
+  }
+
   async registerGuest(data: {
     name: string;
     email: string;
@@ -27,6 +32,11 @@ class UserService {
     role: string;
   }) {
     const users = await userRepository.getAllUsers();
+
+    if (users.some((user) => user.name === data.name)) {
+      throw new AppError(400, "Name already registered");
+    }
+
     if (users.some((user) => user.email === data.email)) {
       throw new AppError(400, "Email already registered");
     }
@@ -37,6 +47,12 @@ class UserService {
 
     if (data.role !== "member") {
       throw new AppError(403, "You can't register as admin");
+    }
+
+    // validasi email harus email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+      throw new AppError(400, "Invalid email format");
     }
 
     const hashedPassword = await hashPassword(data.password);
@@ -102,6 +118,10 @@ class UserService {
   async login(email: string, password: string) {
     const user = await userRepository.getUserByEmail(email);
 
+    if (!user?.email) {
+      throw new AppError(404, "Email not registered");
+    }
+
     if (user.is_deleted) {
       throw new AppError(404, "User already deleted");
     }
@@ -134,24 +154,21 @@ class UserService {
     }
   ) {
     const checkUser = await userRepository.getUserById(targetUserId);
-    if (!checkUser) {
-      throw new AppError(404, "User not found");
-    }
 
-    if (checkUser.is_deleted) {
+    if (checkUser?.is_deleted) {
       throw new AppError(404, "User already deleted");
     }
 
-    if (reqRole === "member" && checkUser.id !== reqId) {
+    if (reqRole === "member" && checkUser?.id !== reqId) {
       throw new AppError(403, "You can't update other user as member");
     }
 
-    if (reqRole === "admin" && checkUser.role === "admin") {
+    if (reqRole === "admin" && checkUser?.role === "admin") {
       throw new AppError(403, "You can't update admin as admin");
     }
 
     // jika role memmber dan mau update role diri sendiri jadi admin maka tidak bisa
-    if (reqRole === "member" && checkUser.id === reqId) {
+    if (reqRole === "member" && checkUser?.id === reqId) {
       if (data.role === "admin") {
         throw new AppError(403, "You can't update role as member to admin");
       }
@@ -171,14 +188,13 @@ class UserService {
 
   async deleteUser(reqRole: string, reqId: string, targetUserId: string) {
     const targetDelete = await userRepository.getUserById(targetUserId);
-    if (!targetDelete) {
-      throw new AppError(404, "User not found");
-    }
 
-    if (targetDelete.is_deleted) {
+    if (targetDelete?.is_deleted) {
       throw new AppError(404, "User already deleted");
     }
-
+    if (targetDelete?.role === "admin") {
+      throw new AppError(403, "You can't delete admin");
+    }
     // if (reqRole === "member" && targetDelete.id !== reqId) {
     //   throw new AppError(403, "You can't delete user as member");
     // }
@@ -190,11 +206,11 @@ class UserService {
       );
     }
 
-    if (reqRole === "admin" && targetDelete.role !== "member") {
+    if (reqRole === "admin" && targetDelete?.role !== "member") {
       throw new AppError(403, "You can't delete admin, just only member");
     }
 
-    await userRepository.softDeleteUserById(targetDelete.id);
+    await userRepository.softDeleteUserById(targetDelete!.id);
     return targetDelete;
   }
 

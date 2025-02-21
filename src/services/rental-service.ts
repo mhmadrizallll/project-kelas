@@ -4,6 +4,12 @@ import { knexInstance as knex } from "../../config/knexInstance";
 import { AppError } from "../helpers/error";
 
 class RentalService {
+  async getAllRental(reqRole: string) {
+    if (reqRole !== "admin") {
+      throw new AppError(403, "You can't get all rental");
+    }
+    return await rentalRepository.getAllRental();
+  }
   async getRentalsByRole(reqRole: string, userId: string) {
     const rentals = await rentalRepository.getRentalsByRole(reqRole, userId);
     // jika rental gak ada maka throw error

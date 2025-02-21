@@ -11,22 +11,12 @@ class UserRepository {
       .withGraphFetched("rentals.books");
   }
 
-  async getUserById(id: string): Promise<UserModel> {
-    const user = await UserModel.query().findById(id);
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    return user;
+  async getUserById(id: string): Promise<UserModel | undefined> {
+    return await UserModel.query().findById(id);
   }
 
   async getUserByEmail(email: string) {
-    const user = await UserModel.query().findOne({ email });
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    return user;
+    return await UserModel.query().findOne({ email });
   }
   async createUser(data: UserModel): Promise<UserModel> {
     return await UserModel.query().insert(data);

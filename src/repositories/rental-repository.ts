@@ -112,6 +112,11 @@ class RentalRepository {
   async getRentalAfterUpdate(rentalId: string) {
     return knex("rentals").where("id", rentalId).returning("*").first();
   }
+
+  // get semua rentall
+  async getAllRental() {
+    return await RentalModel.query();
+  }
 }
 
 const rentalRepository = new RentalRepository();

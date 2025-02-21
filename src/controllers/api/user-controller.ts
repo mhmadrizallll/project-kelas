@@ -31,6 +31,18 @@ class UserController {
     }
   }
 
+  async getUserById(req: AuthenticatedRequest, res: Response) {
+    try {
+      const { id } = req.params;
+      // console.log(reqRole);
+      const user = await userService.getUserById(id);
+      res.status(200).json({ status: true, message: "Data User", data: user });
+    } catch (error: any) {
+      const statusCode = error instanceof AppError ? error.status : 500;
+      res.status(statusCode).json({ status: false, message: error.message });
+    }
+  }
+
   async registerGuest(req: Request, res: Response) {
     try {
       const { name, email, password, role } = req.body;

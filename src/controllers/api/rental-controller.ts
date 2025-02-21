@@ -12,6 +12,22 @@ interface AuthRequest extends Request {
 }
 
 class RentalController {
+  async getAllRentals(req: AuthRequest, res: Response) {
+    try {
+      const reqRole = req.user?.role;
+      const rentals = await rentalService.getAllRental(reqRole!);
+      res.status(200).json({
+        status: true,
+        message: "Rentals Data successfully",
+        data: rentals,
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
   async getRentalsByRole(req: AuthRequest, res: Response) {
     try {
       const userId = req.user?.id; // Ambil ID user dari middleware auth

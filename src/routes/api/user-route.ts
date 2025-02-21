@@ -4,6 +4,7 @@ import { userController } from "../../controllers/api/user-controller";
 import authMiddleware from "../../middlewares/auth";
 
 router.get("/", authMiddleware, userController.getAllUsers);
+router.get("/:id", authMiddleware, userController.getUserById);
 router.post("/register", userController.registerGuest);
 router.post("/login/auth/google", userController.loginAuthGoogle);
 router.post("/login", userController.login);
