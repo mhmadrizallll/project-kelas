@@ -115,7 +115,10 @@ class RentalRepository {
 
   // get semua rentall
   async getAllRental() {
-    return await RentalModel.query();
+    return await RentalModel.query().withGraphFetched({
+      books: true,
+      user: true,
+    });
   }
 }
 
