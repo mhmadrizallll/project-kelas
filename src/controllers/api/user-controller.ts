@@ -160,6 +160,7 @@ class UserController {
         id: response?.sub,
         role: "member",
       };
+      // console.log(payload);
       const tokenJwt = jwt.sign(payload, "member", { expiresIn: "1d" });
       res.status(200).json({ status: true, token: tokenJwt, data: response });
     } catch (error: any) {

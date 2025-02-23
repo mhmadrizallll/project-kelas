@@ -1,0 +1,679 @@
+{
+	"info": {
+		"_postman_id": "4a92c1f0-0d43-4577-b140-4718936b290a",
+		"name": "project-bootcamp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27098134",
+		"_collection_link": "https://project-kelas.postman.co/workspace/Project-Kelas-Workspace~70828707-7f49-48d1-8cb7-da63b7871c0c/collection/27098134-4a92c1f0-0d43-4577-b140-4718936b290a?action=share&source=collection_link&creator=27098134"
+	},
+	"item": [
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "/users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiYmY3ODFmLTZiMjQtNGU2NC1iY2U3LWZlNjEyM2QwMzRkOSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3Mzk1ODU2NTgsImV4cCI6MTczOTY3MjA1OH0.EvOfOFYCQfy_DVssZTvknRxK7DssOoJq7Z-Fd4At5FU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"fina\",\r\n    \"email\": \"fina@gmail.com\",\r\n    \"password\": \"fina\"    \r\n}   ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/register/logging",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MjU1MiwiZXhwIjoxNzM5NjY4OTUyfQ.BRJY8I1ZQDtmbG1K2ihw2nHfx7bqzcr1XxPg_xDNWfI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"rey\",\r\n    \"email\": \"rey@gmail.com\",\r\n    \"password\": \"rey\",\r\n    \"role\": \"member\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/register/logging",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"register",
+								"logging"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"email\": \"fina@gmail.com\",\r\n    \"password\": \"fina123\"    \r\n}   ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MjU1MiwiZXhwIjoxNzM5NjY4OTUyfQ.BRJY8I1ZQDtmbG1K2ihw2nHfx7bqzcr1XxPg_xDNWfI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"email\": \"fina@gmail.com\",\r\n    \"password\": \"fina123\"    \r\n}   ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/update/cbbf781f-6b24-4e64-bce7-fe6123d034d9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"update",
+								"cbbf781f-6b24-4e64-bce7-fe6123d034d9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzAyNiwiZXhwIjoxNzM5NjY5NDI2fQ.G4EQBGw4f23NXjz5muF548fUo-9ZWVmny0noyFIpvn4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/delete/f9f23479-273c-48a9-851f-8c707723e89c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"delete",
+								"f9f23479-273c-48a9-851f-8c707723e89c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/restore/id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzAyNiwiZXhwIjoxNzM5NjY5NDI2fQ.G4EQBGw4f23NXjz5muF548fUo-9ZWVmny0noyFIpvn4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/restore/f9f23479-273c-48a9-851f-8c707723e89c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"restore",
+								"f9f23479-273c-48a9-851f-8c707723e89c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjVkMTJhYjc4MmNiNjA5NjI4NWY2OWU0OGFlYTk5MDc5YmI1OWNiODYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2MDQ4MDMzMTIzNC1xZnM2bWtzZ2VxOG82ajRlZ2c2c3ZtNW44ZXM5YXFjNS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjYwNDgwMzMxMjM0LXFmczZta3NnZXE4bzZqNGVnZzZzdm01bjhlczlhcWM1LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE4MzkxNjkxOTYyNDcyMjMwMzM4IiwiZW1haWwiOiJtdWhhbW1hZHJpemFsMDg3NzMzNTIxQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3Mzk3NzY1MzEsIm5hbWUiOiJNdWhhbW1hZCBSaXphbCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NJRUJlYWtXRHF2cFFpVXFsLWVYR2RaM0FaZ2ZReURob0ZyMWZjUW1uQVZ2SUpQWldaOT1zOTYtYyIsImdpdmVuX25hbWUiOiJNdWhhbW1hZCIsImZhbWlseV9uYW1lIjoiUml6YWwiLCJpYXQiOjE3Mzk3NzY4MzEsImV4cCI6MTczOTc4MDQzMSwianRpIjoiMjBhNmEzMjY2MWNiZTdjMTQ2ZWQ4YWU3YjU4NDg4MDMxODE1ZThmMiJ9.TGs8mAv7eg2LOZvET0I4oxqjrqw3XteyYPTdNMcwGoF9IUtp385bSqGHh9xNv5R2wH0TiZx4hHUAV11KTpZ_NbtEWKjss0rTmFZFTQW-SCYXwOsSt5H1temJt2ZSZbFbfrYJZS8iAgIVmm3bkqqAbmnqAjllqVOcSkaEAG-OUJ0BJhY2WaWo1zR44zx4hB02aRSatOfQm1K0pAqGfyNQtcaRmvo6miHyqFCh2PE-bP4OBKGeHmJbJ_q5T_SsTshXbPHuit0ZdS1XPSsf_3Hkb_-W7U-2ySrceEpUOefVDY1DX1D4nH1rzZVAA6VF4pp9PFYAxvpMwyoMfYz_r0HdIA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/login/auth/google",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"login",
+								"auth",
+								"google"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BOOKS",
+			"item": [
+				{
+					"name": "/books",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzE2OCwiZXhwIjoxNzM5NjY5NTY4fQ.tqcf7z3dJ0z41KuAod7Yi6Jg9Q5DGDWR1uF2zA3x5W4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/books/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/category",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzE2OCwiZXhwIjoxNzM5NjY5NTY4fQ.tqcf7z3dJ0z41KuAod7Yi6Jg9Q5DGDWR1uF2zA3x5W4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/category",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/books/create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzE2OCwiZXhwIjoxNzM5NjY5NTY4fQ.tqcf7z3dJ0z41KuAod7Yi6Jg9Q5DGDWR1uF2zA3x5W4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "code_book",
+									"value": "A0010",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Elegi Haekal",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Kenshh/Downloads/elegi haekal.jpg"
+								},
+								{
+									"key": "author",
+									"value": "Dhia'an Farah",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "I like this book when i first reading it",
+									"type": "text"
+								},
+								{
+									"key": "category_ids",
+									"value": "070137f6-9981-4a2b-8b95-dbd953db8908",
+									"type": "text"
+								},
+								{
+									"key": "category_ids",
+									"value": "d6c2d97c-3c46-4256-b8e0-7870e52824e9",
+									"type": "text"
+								},
+								{
+									"key": "category_ids",
+									"value": "ccef68d1-96c0-4fd6-8cfe-49eaf252c011",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/books/create",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/books/update",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzE2OCwiZXhwIjoxNzM5NjY5NTY4fQ.tqcf7z3dJ0z41KuAod7Yi6Jg9Q5DGDWR1uF2zA3x5W4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "code_book",
+									"value": "A0010",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Elegi Haekal",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "author",
+									"value": "Dhia'an Farah",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "I like this book when i first reading it",
+									"type": "text"
+								},
+								{
+									"key": "category_ids",
+									"value": "070137f6-9981-4a2b-8b95-dbd953db8908",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/books/update/ea5834f6-f528-4b27-9172-302d40e373dd",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"update",
+								"ea5834f6-f528-4b27-9172-302d40e373dd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/books/delete/id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzE2OCwiZXhwIjoxNzM5NjY5NTY4fQ.tqcf7z3dJ0z41KuAod7Yi6Jg9Q5DGDWR1uF2zA3x5W4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/books/delete/ea5834f6-f528-4b27-9172-302d40e373dd",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"delete",
+								"ea5834f6-f528-4b27-9172-302d40e373dd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "books/id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzE2OCwiZXhwIjoxNzM5NjY5NTY4fQ.tqcf7z3dJ0z41KuAod7Yi6Jg9Q5DGDWR1uF2zA3x5W4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/books/ea5834f6-f528-4b27-9172-302d40e373dd",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"ea5834f6-f528-4b27-9172-302d40e373dd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/books/restore",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJjMDI2NDZkLTIxNjMtNDAxOC1iMjYyLWNlOTc0ODEyOWIzYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTU4MzE2OCwiZXhwIjoxNzM5NjY5NTY4fQ.tqcf7z3dJ0z41KuAod7Yi6Jg9Q5DGDWR1uF2zA3x5W4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/books/restore/ea5834f6-f528-4b27-9172-302d40e373dd",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"restore",
+								"ea5834f6-f528-4b27-9172-302d40e373dd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/update/f18f241d-16d1-439a-bee6-292ad850ab0b",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"update",
+								"f18f241d-16d1-439a-bee6-292ad850ab0b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RENTALS",
+			"item": [
+				{
+					"name": "/create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1YTU2YjY3LTU1YjUtNGI3YS1iNzkwLTE1OTFjYTMwYjlkMyIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3NDAyMTI0MjksImV4cCI6MTc0MDI5ODgyOX0.su_qeBUtWbMOxQf6Ir8lsnqbY9gdpsgDjXdRg5nIhU4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"books_ids\": [\"82672e88-de45-49c9-b544-a5d706e9756a\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/rentals/create",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"rentals",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/get",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiYmY3ODFmLTZiMjQtNGU2NC1iY2U3LWZlNjEyM2QwMzRkOSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3Mzk1ODU2NTgsImV4cCI6MTczOTY3MjA1OH0.EvOfOFYCQfy_DVssZTvknRxK7DssOoJq7Z-Fd4At5FU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/rentals/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"rentals",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/return",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiYmY3ODFmLTZiMjQtNGU2NC1iY2U3LWZlNjEyM2QwMzRkOSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3Mzk1ODU2NTgsImV4cCI6MTczOTY3MjA1OH0.EvOfOFYCQfy_DVssZTvknRxK7DssOoJq7Z-Fd4At5FU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rental_id\": \"fedd62d1-f9c7-4534-acc3-8e1d6b5d10fa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/rentals/return",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"rentals",
+								"return"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
